@@ -1,0 +1,82 @@
+<div class="report-container">
+  <main class="content">
+    <header class="page-header">
+      <h1>Manage Reports</h1>
+    </header>
+
+    <section class="filter-bar">
+      <div class="search-box">
+        <i class="material-icons">search</i>
+        <input type="text" placeholder="Search by title or keyword...">
+      </div>
+
+      <div class="filter-group">
+        <select>
+          <option value="">Status: All</option>
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+
+        <select>
+          <option value="">Type: All</option>
+          <option>Pothole</option>
+          <option>Poor Lighting</option>
+          <option>Drainage</option>
+        </select>
+
+        <input type="date">
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="table-container">
+        <table>
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th>Photo</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let report of reports">
+            <td><span class="type-badge">{{report.type}}</span></td>
+            <td>
+              <div class="photo-display">
+                <i class="material-icons">image</i>
+                <span>{{report.photo}}</span>
+              </div>
+            </td>
+            <td class="location-link">
+              <i class="material-icons">place</i> {{report.location}}
+            </td>
+            <td>{{report.date}}</td>
+            <td>
+              <select class="status-dropdown" [value]="report.status">
+                <option>Pending</option>
+                <option>Approved</option>
+                <option>In Progress</option>
+                <option>Completed</option>
+              </select>
+            </td>
+            <td>
+              <button class="action-btn">
+                <i class="material-icons">edit</i> Update
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-popup" *ngIf="showConfirmation">
+    <i class="material-icons">check_circle</i> Status updated successfully!
+  </div>
+</div>

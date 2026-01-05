@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Material+Icons&display=swap');
+
+.dashboard-wrapper {
+  --primary-accent: #2563eb;
+  --primary-hover: #3b82f6;
+  --bg-page: #f1f5f9;
+  --card-bg: #ffffff;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+}
+
+/* MAIN CONTENT */
+.content { padding: 40px; max-width: 1200px; margin: 0 auto; }
+.page-header { margin-bottom: 32px; }
+.page-header h1 { font-size: 28px; margin-bottom: 5px; }
+
+/* STATS CARDS */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 40px; }
+.stat-card {
+  background: var(--card-bg);
+  padding: 24px; border-radius: 20px;
+  display: flex; align-items: center; gap: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  cursor: pointer; transition: 0.3s;
+  border: 1px solid #e2e8f0;
+}
+.stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
+.stat-icon {
+  width: 50px; height: 50px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.stat-icon i { font-size: 28px; color: white; }
+/* --- Status Icons (Top Cards) --- */
+.pending { background: #f59e0b; }    /* Yellow/Amber */
+.approved { background: #818cf8; }   /* Purple/Indigo */
+.progress { background: #3b82f6; }   /* Blue */
+.completed { background: #10b981; }  /* Green */
+
+/* --- Status Badges (Table) --- */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Pending: Yellow */
+.status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Approved: Purple */
+.status-badge.approved {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+/* In Progress: Blue */
+.status-badge.in-progress {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* Completed: Green */
+.status-badge.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.stat-info h3 { font-size: 24px; margin: 0; }
+.stat-info p { font-size: 14px; margin: 0; color: var(--text-muted); }
+
+/* TABLE */
+.table-section { background: white; border-radius: 20px; padding: 24px; border: 1px solid #e2e8f0; }
+.table-container { width: 100%; overflow-x: auto; margin-top: 20px; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th { padding: 16px; border-bottom: 2px solid #f1f5f9; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+td { padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+
+.status-badge {
+  padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+}
+.status-badge.pending { background: #fef3c7; color: #92400e; }
+.status-badge.in-progress { background: #dbeafe; color: #1e40af; }
+.status-badge.completed { background: #d1fae5; color: #065f46; }
+
+.view-btn {
+  background: #f1f5f9; border: none; padding: 8px 16px;
+  border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 5px;
+  transition: 0.2s; color: var(--primary-accent); font-weight: 600;
+}
+.view-btn:hover { background: var(--primary-accent); color: white; }
+
+/* Add to your existing CSS */
+
+/* Approved Stat Icon */
+.approved { background: #6366f1; } /* Indigo color for Approved */
+
+/* Type Tag */
+.type-tag {
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* Photo Placeholder Cell */
+.photo-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+  background: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+  width: fit-content;
+}
+
+.photo-placeholder i { font-size: 16px; }
+
+/* Status Badge for Approved */
+.status-badge.approved {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.bold-text {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+th:nth-child(2), td:nth-child(2) {
+  width: 35%; /* Gives more room to the Title column */
+}
+
+/* Ensure the stats grid can fit 4 items */
+.stats-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}

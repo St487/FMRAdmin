@@ -1,0 +1,70 @@
+<div class="dashboard-wrapper">
+  <main class="content">
+    <header class="page-header">
+      <h1>Dashboard Overview</h1>
+      <p>Summary information and recent system activity</p>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card" (click)="filterReports('Pending')">
+        <div class="stat-icon pending"><i class="material-icons">pending_actions</i></div>
+        <div class="stat-info"><h3>24</h3><p>Pending</p></div>
+      </div>
+
+      <div class="stat-card" (click)="filterReports('Approved')">
+        <div class="stat-icon approved"><i class="material-icons">thumb_up</i></div>
+        <div class="stat-info"><h3>45</h3><p>Approved</p></div>
+      </div>
+
+      <div class="stat-card" (click)="filterReports('In Progress')">
+        <div class="stat-icon progress"><i class="material-icons">sync</i></div>
+        <div class="stat-info"><h3>12</h3><p>In Progress</p></div>
+      </div>
+      <div class="stat-card" (click)="filterReports('Completed')">
+        <div class="stat-icon completed"><i class="material-icons">check_circle</i></div>
+        <div class="stat-info"><h3>158</h3><p>Completed</p></div>
+      </div>
+    </div>
+
+    <section class="table-section">
+      <div class="section-header"><h2>Recent Reports</h2></div>
+      <div class="table-container">
+        <table>
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th>Report Title</th>
+            <th>Photo</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let report of recentReports">
+            <td><span class="type-tag">{{report.type}}</span></td>
+            <td class="bold-text">{{report.title}}</td>
+            <td>
+              <div class="photo-placeholder">
+                <i class="material-icons">image</i>
+                <span>{{report.photo}}</span>
+              </div>
+            </td>
+            <td>{{report.date}}</td>
+            <td>
+                <span class="status-badge" [ngClass]="report.status.toLowerCase().replace(' ', '-')">
+                  {{report.status}}
+                </span>
+            </td>
+            <td>
+              <button class="view-btn" (click)="viewDetails(report.title)">
+                <i class="material-icons">visibility</i> View
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>

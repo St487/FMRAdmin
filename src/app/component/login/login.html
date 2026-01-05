@@ -1,0 +1,32 @@
+<div class="login-container">
+  <div class="login-box">
+    <div class="header">
+      <div class="logo-area">
+        <i class="material-icons">admin_panel_settings</i>
+      </div>
+      <h1>Admin Login</h1>
+      <p>Enter your credentials to access the system</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onLogin()">
+      <div class="input-group">
+        <label>User ID</label>
+        <input type="text" name="userId" [(ngModel)]="userId" placeholder="Enter ID" autocomplete="off">
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" name="password" [(ngModel)]="password" placeholder="Enter Password">
+      </div>
+
+      <div class="error-message" *ngIf="showError">
+        <i class="material-icons">error_outline</i>
+        <span>Invalid User ID or Password.</span>
+      </div>
+
+      <button type="submit" class="login-btn">
+        Login
+      </button>
+    </form>
+  </div>
+</div>
