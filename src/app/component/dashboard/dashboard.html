@@ -1,70 +1,99 @@
 <div class="dashboard-wrapper">
   <main class="content">
-    <header class="page-header">
-      <h1>Dashboard Overview</h1>
-      <p>Summary information and recent system activity</p>
-    </header>
+    <div class="page-header">
+      <div class="header-row">
 
-    <div class="stats-grid">
-      <div class="stat-card" (click)="filterReports('Pending')">
-        <div class="stat-icon pending"><i class="material-icons">pending_actions</i></div>
-        <div class="stat-info"><h3>24</h3><p>Pending</p></div>
-      </div>
+        <div>
+          <h1>Dashboard Overview</h1>
+          <p>Summary information and chart analysis</p>
+        </div>
 
-      <div class="stat-card" (click)="filterReports('Approved')">
-        <div class="stat-icon approved"><i class="material-icons">thumb_up</i></div>
-        <div class="stat-info"><h3>45</h3><p>Approved</p></div>
-      </div>
+        <div class="filter-group">
+          <select (change)="onTimeFilterChange($event)">
+            <option value="30">Last 30 Days</option>
+            <option value="60">Last 60 Days</option>
+            <option value="90">Last 90 Days</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
 
-      <div class="stat-card" (click)="filterReports('In Progress')">
-        <div class="stat-icon progress"><i class="material-icons">sync</i></div>
-        <div class="stat-info"><h3>12</h3><p>In Progress</p></div>
-      </div>
-      <div class="stat-card" (click)="filterReports('Completed')">
-        <div class="stat-icon completed"><i class="material-icons">check_circle</i></div>
-        <div class="stat-info"><h3>158</h3><p>Completed</p></div>
       </div>
     </div>
 
-    <section class="table-section">
-      <div class="section-header"><h2>Recent Reports</h2></div>
-      <div class="table-container">
-        <table>
-          <thead>
-          <tr>
-            <th>Type</th>
-            <th>Report Title</th>
-            <th>Photo</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let report of recentReports">
-            <td><span class="type-tag">{{report.type}}</span></td>
-            <td class="bold-text">{{report.title}}</td>
-            <td>
-              <div class="photo-placeholder">
-                <i class="material-icons">image</i>
-                <span>{{report.photo}}</span>
-              </div>
-            </td>
-            <td>{{report.date}}</td>
-            <td>
-                <span class="status-badge" [ngClass]="report.status.toLowerCase().replace(' ', '-')">
-                  {{report.status}}
-                </span>
-            </td>
-            <td>
-              <button class="view-btn" (click)="viewDetails(report.title)">
-                <i class="material-icons">visibility</i> View
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+    <div class="stats-grid">
+      <div class="stat-card" (click)="filterReports('pending')">
+        <div class="stat-icon pending">
+          <i class="material-icons">pending_actions</i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ statusSummary?.pending || 0 }}</h3>
+          <p>Pending</p>
+        </div>
       </div>
-    </section>
+
+      <div class="stat-card" (click)="filterReports('approved')">
+        <div class="stat-icon approved">
+          <i class="material-icons">verified</i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ statusSummary?.approved || 0 }}</h3>
+          <p>Approved</p>
+        </div>
+      </div>
+
+      <div class="stat-card" (click)="filterReports('in_progress')">
+        <div class="stat-icon progress">
+          <i class="material-icons">autorenew</i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ statusSummary?.in_progress || 0 }}</h3>
+          <p>In Progress</p>
+        </div>
+      </div>
+
+      <div class="stat-card" (click)="filterReports('completed')">
+        <div class="stat-icon completed">
+          <i class="material-icons">task_alt</i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ statusSummary?.completed || 0 }}</h3>
+          <p>In Progress</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-card">
+        <h3>Total Completion Rate</h3>
+        <div class="kpi-value">{{completionRate}}%</div>
+        <p>{{completedThisWeek}} of {{totalThisWeek}} reports completed</p>
+      </div>
+
+<!--      <button class="export-btn" (click)="exportPDF()">-->
+<!--        <i class="material-icons">picture_as_pdf</i>-->
+<!--        Export Report-->
+<!--      </button>-->
+    </div>
+
+    <div class="charts-container">
+
+      <div class="chart-row">
+        <div class="chart-card">
+          <h3>Reports by Status</h3>
+          <canvas #statusChart></canvas>
+        </div>
+
+        <div class="chart-card">
+          <h3>Reports Over Time</h3>
+          <canvas #trendChart></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card full-width">
+        <h3>Reports by Type</h3>
+        <canvas #typeChart></canvas>
+      </div>
+
+    </div>
   </main>
 </div>

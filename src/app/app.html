@@ -1,25 +1,75 @@
-<nav class="navbar" *ngIf="shouldShowNavbar()">
+<nav class="sidebar" *ngIf="shouldShowNavbar()">
+
+  <!-- BRAND -->
   <div class="nav-brand">
     <i class="material-icons">admin_panel_settings</i>
     <span>AdminPanel</span>
   </div>
 
+  <!-- HOME -->
   <ul class="nav-links">
     <li routerLink="/dashboard" routerLinkActive="active">
       <i class="material-icons">home</i>
       <span>Home</span>
     </li>
-
-    <li routerLink="/reports" routerLinkActive="active">
-      <i class="material-icons">assignment</i>
-      <span>Reports</span>
+    <li routerLink="/map" routerLinkActive="active">
+      <i class="material-icons">map</i>
+      <span>Map</span>
     </li>
   </ul>
 
+  <!-- DIVIDER -->
+  <div class="divider"></div>
+
+  <!-- REPORT SECTION TITLE -->
+  <div class="section-title">Reports</div>
+
+  <!-- REPORT SUBMENU -->
+  <ul class="nav-links sub-menu">
+
+    <li routerLink="/reports/all" routerLinkActive="active">
+      <i class="material-icons">assignment</i>
+      <span>All</span>
+    </li>
+
+    <li routerLink="/reports/pending" routerLinkActive="active">
+      <i class="material-icons">pending_actions</i>
+      <span>Pending</span>
+    </li>
+
+    <li routerLink="/reports/approved" routerLinkActive="active">
+      <i class="material-icons">verified</i>
+      <span>Approved</span>
+    </li>
+
+    <li routerLink="/reports/in-progress" routerLinkActive="active">
+      <i class="material-icons">autorenew</i>
+      <span>In Progress</span>
+    </li>
+
+    <li routerLink="/reports/rejected" routerLinkActive="active">
+      <i class="material-icons">cancel</i>
+      <span>Rejected</span>
+    </li>
+
+    <li routerLink="/reports/completed" routerLinkActive="active">
+      <i class="material-icons">task_alt</i>
+      <span>Completed</span>
+    </li>
+
+  </ul>
+
+  <!-- DIVIDER -->
+  <div class="divider"></div>
+
+  <!-- LOGOUT -->
   <div class="nav-user" (click)="logout()">
     <i class="material-icons">logout</i>
     <span>Logout</span>
   </div>
+
 </nav>
 
-<router-outlet></router-outlet>
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>

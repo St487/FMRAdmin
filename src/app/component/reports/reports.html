@@ -1,82 +1,294 @@
 <div class="report-container">
   <main class="content">
     <header class="page-header">
-      <h1>Manage Reports</h1>
+      <h1>{{ getPageTitle() }}</h1>
     </header>
 
     <section class="filter-bar">
       <div class="search-box">
         <i class="material-icons">search</i>
-        <input type="text" placeholder="Search by title or keyword...">
+        <input type="text"
+               [(ngModel)]="searchText"
+               (input)="applyFilters()"
+               placeholder="Search by title or keyword...">
       </div>
 
       <div class="filter-group">
-        <select>
+
+        <!-- STATUS -->
+        <select *ngIf="!hideStatusFilter"
+                [(ngModel)]="selectedStatus"
+                (change)="applyFilters()">
           <option value="">Status: All</option>
-          <option>Pending</option>
-          <option>Approved</option>
-          <option>In Progress</option>
-          <option>Completed</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="in progress">In Progress</option>
+          <option value="rejected">Rejected</option>
+          <option value="completed">Completed</option>
         </select>
 
-        <select>
+        <!-- TYPE -->
+        <select [(ngModel)]="selectedType" (change)="applyFilters()">
           <option value="">Type: All</option>
-          <option>Pothole</option>
-          <option>Poor Lighting</option>
-          <option>Drainage</option>
+          <option *ngFor="let t of uniqueTypes" [value]="t">
+            {{ t }}
+          </option>
         </select>
 
-        <input type="date">
+        <!-- DATE -->
+        <input type="date"
+               [(ngModel)]="selectedDate"
+               (change)="applyFilters()">
+
+        <button class="clear-btn" (click)="clearFilters()">
+          Clear All
+        </button>
+
       </div>
     </section>
 
     <section class="table-card">
-      <div class="table-container">
-        <table>
-          <thead>
-          <tr>
-            <th>Type</th>
-            <th>Photo</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let report of reports">
-            <td><span class="type-badge">{{report.type}}</span></td>
-            <td>
-              <div class="photo-display">
-                <i class="material-icons">image</i>
-                <span>{{report.photo}}</span>
+      <table>
+        <thead>
+        <tr>
+          <th>Type</th>
+          <th>Photo Overview</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let report of filteredReports">
+          <td>
+            <span class="type-badge" [ngClass]="getTypeClass(report.type)">
+              {{report.type}}
+            </span>
+          </td>
+
+          <td>
+            <div class="photo-container-large">
+              <img *ngIf="report.photo" [src]="report.photo" class="table-img">
+              <div *ngIf="!report.photo" class="no-photo-placeholder">
+                <i class="material-icons">image_not_supported</i>
               </div>
-            </td>
-            <td class="location-link">
-              <i class="material-icons">place</i> {{report.location}}
-            </td>
-            <td>{{report.date}}</td>
-            <td>
-              <select class="status-dropdown" [value]="report.status">
-                <option>Pending</option>
-                <option>Approved</option>
-                <option>In Progress</option>
-                <option>Completed</option>
-              </select>
-            </td>
-            <td>
-              <button class="action-btn">
-                <i class="material-icons">edit</i> Update
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="location-wrapper">
+              <i class="material-icons">place</i>
+              <span>{{report.location}}</span>
+            </div>
+          </td>
+
+          <td class="date-cell">{{report.date | date:'dd/MM/yyyy'}}</td>
+
+          <td>
+            <span class="status-tag" [ngClass]="getStatusClass(report.status)">
+              {{ report.status | titlecase }}
+            </span>
+          </td>
+
+          <td>
+            <button class="action-btn" (click)="openReport(report)">
+              <i class="material-icons">visibility</i> View
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </section>
   </main>
 
+  <!-- MODAL -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+      <button class="modal-close-x" (click)="closeModal()">&times;</button>
+
+      <div class="modal-header">
+        <h2>Report Details</h2>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- LEFT -->
+        <div class="info-section">
+          <div class="modal-meta-header">
+            <span class="type-badge-pill">{{selectedReport.type}}</span>
+          </div>
+
+          <h1 class="modal-title-alt">{{selectedReport.title}}</h1>
+
+          <div class="info-quick-grid">
+            <div class="info-item">
+              <label>Date Submitted</label>
+              <div class="val">
+                <i class="material-icons">calendar_today</i>
+                {{selectedReport.date | date:'dd MMM yyyy'}}
+              </div>
+            </div>
+            <div class="info-item">
+              <label>Precise Location</label>
+              <div class="val">
+                <i class="material-icons">place</i>
+                {{selectedReport.location}}
+              </div>
+            </div>
+          </div>
+
+          <div class="description-container">
+            <label class="label-tiny">Report Description</label>
+            <div class="description-text-alt">
+              {{selectedReport.description}}
+            </div>
+          </div>
+
+          <div class="map-wrapper-alt">
+            <iframe [src]="selectedReport.mapUrl | safe" loading="lazy"></iframe>
+            <div class="map-overlay-coords">
+              <code>{{selectedReport.latitude}}, {{selectedReport.longitude}}</code>
+            </div>
+          </div>
+
+          <div class="photo-section">
+            <label class="label-tiny">Attached Photos</label>
+
+            <div class="photo-grid">
+              <img *ngIf="selectedReport.photo1"
+                   [src]="selectedReport.photo1"
+                   class="modal-img"
+                   (click)="openImagePreview(selectedReport.photo1)">
+
+              <img *ngIf="selectedReport.photo2"
+                   [src]="selectedReport.photo2"
+                   class="modal-img"
+                   (click)="openImagePreview(selectedReport.photo2)">
+
+              <img *ngIf="selectedReport.photo3"
+                   [src]="selectedReport.photo3"
+                   class="modal-img"
+                   (click)="openImagePreview(selectedReport.photo3)">
+            </div>
+          </div>
+        </div>
+<!--        <div class="info-section">-->
+
+<!--          <label class="label-tiny">Report Information</label>-->
+<!--          <span class="type-badge-blue">{{selectedReport.type}}</span>-->
+
+<!--          <h3 class="modal-title">{{selectedReport.title}}</h3>-->
+
+<!--          &lt;!&ndash; DESCRIPTION &ndash;&gt;-->
+<!--          <div class="description-text">-->
+<!--            {{selectedReport.description}}-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; LOCATION (MOVED ABOVE MAP) &ndash;&gt;-->
+<!--          <div class="location-box">-->
+<!--            <i class="material-icons">place</i>-->
+<!--            <span>{{selectedReport.location}}</span>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; MAP PREVIEW &ndash;&gt;-->
+<!--          <div class="map-preview" *ngIf="selectedReport.mapUrl">-->
+<!--            <iframe-->
+<!--              [src]="selectedReport.mapUrl | safe"-->
+<!--              loading="lazy">-->
+<!--            </iframe>-->
+
+<!--            &lt;!&ndash; LAT LNG &ndash;&gt;-->
+<!--            <div class="coords">-->
+<!--              Lat: {{selectedReport.latitude}} | Lng: {{selectedReport.longitude}}-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; PHOTOS &ndash;&gt;-->
+<!--          <div class="photo-section">-->
+<!--            <label class="label-tiny">Attached Photos</label>-->
+
+<!--            <div class="photo-grid">-->
+<!--              <img *ngIf="selectedReport.photo1"-->
+<!--                   [src]="selectedReport.photo1"-->
+<!--                   class="modal-img"-->
+<!--                   (click)="openImagePreview(selectedReport.photo1)">-->
+
+<!--              <img *ngIf="selectedReport.photo2"-->
+<!--                   [src]="selectedReport.photo2"-->
+<!--                   class="modal-img"-->
+<!--                   (click)="openImagePreview(selectedReport.photo2)">-->
+
+<!--              <img *ngIf="selectedReport.photo3"-->
+<!--                   [src]="selectedReport.photo3"-->
+<!--                   class="modal-img"-->
+<!--                   (click)="openImagePreview(selectedReport.photo3)">-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--        </div>-->
+
+        <!-- RIGHT -->
+        <div class="reporter-section">
+          <label class="label-tiny">Reported By</label>
+
+          <div class="user-info">
+            <div class="avatar-circle">
+              <i class="material-icons">person_outline</i>
+            </div>
+            <div>
+              <p class="u-title">Name</p>
+              <p class="u-name">{{selectedReport.reporter.name}}</p>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <p class="u-title">Email</p>
+            <p class="u-data">{{selectedReport.reporter.email}}</p>
+          </div>
+
+          <div class="contact-block">
+            <p class="u-title">Phone</p>
+            <p class="u-data">{{selectedReport.reporter.phone}}</p>
+          </div>
+
+          <!-- STATUS DROPDOWN (RIGHT COLUMN BOTTOM) -->
+          <div class="reporter-status">
+            <label class="label-tiny">Update Status</label>
+
+            <select [(ngModel)]="selectedReport.status">
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="in progress">In Progress</option>
+              <option value="rejected">Rejected</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+      <!-- ✅ STATUS MOVED TO BOTTOM -->
+      <div class="status-bottom">
+        <div class="status-actions">
+          <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+          <button class="btn-update" (click)="updateReport()">
+            Update Report
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- IMAGE PREVIEW OVERLAY -->
+  <div class="image-preview-overlay" *ngIf="previewImage" (click)="closeImagePreview()">
+    <img [src]="previewImage" class="full-image" (click)="$event.stopPropagation()">
+  </div>
+
+  <!-- TOAST SUCCESS MESSAGE -->
   <div class="toast-popup" *ngIf="showConfirmation">
-    <i class="material-icons">check_circle</i> Status updated successfully!
+    <i class="material-icons">check_circle</i>
+    Report updated successfully!
   </div>
 </div>
