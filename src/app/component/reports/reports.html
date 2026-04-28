@@ -47,7 +47,7 @@
       </div>
     </section>
 
-    <section class="table-card">
+    <section class="table-card table-scroll">
       <table>
         <thead>
         <tr>
@@ -175,61 +175,6 @@
             </div>
           </div>
         </div>
-<!--        <div class="info-section">-->
-
-<!--          <label class="label-tiny">Report Information</label>-->
-<!--          <span class="type-badge-blue">{{selectedReport.type}}</span>-->
-
-<!--          <h3 class="modal-title">{{selectedReport.title}}</h3>-->
-
-<!--          &lt;!&ndash; DESCRIPTION &ndash;&gt;-->
-<!--          <div class="description-text">-->
-<!--            {{selectedReport.description}}-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; LOCATION (MOVED ABOVE MAP) &ndash;&gt;-->
-<!--          <div class="location-box">-->
-<!--            <i class="material-icons">place</i>-->
-<!--            <span>{{selectedReport.location}}</span>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; MAP PREVIEW &ndash;&gt;-->
-<!--          <div class="map-preview" *ngIf="selectedReport.mapUrl">-->
-<!--            <iframe-->
-<!--              [src]="selectedReport.mapUrl | safe"-->
-<!--              loading="lazy">-->
-<!--            </iframe>-->
-
-<!--            &lt;!&ndash; LAT LNG &ndash;&gt;-->
-<!--            <div class="coords">-->
-<!--              Lat: {{selectedReport.latitude}} | Lng: {{selectedReport.longitude}}-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; PHOTOS &ndash;&gt;-->
-<!--          <div class="photo-section">-->
-<!--            <label class="label-tiny">Attached Photos</label>-->
-
-<!--            <div class="photo-grid">-->
-<!--              <img *ngIf="selectedReport.photo1"-->
-<!--                   [src]="selectedReport.photo1"-->
-<!--                   class="modal-img"-->
-<!--                   (click)="openImagePreview(selectedReport.photo1)">-->
-
-<!--              <img *ngIf="selectedReport.photo2"-->
-<!--                   [src]="selectedReport.photo2"-->
-<!--                   class="modal-img"-->
-<!--                   (click)="openImagePreview(selectedReport.photo2)">-->
-
-<!--              <img *ngIf="selectedReport.photo3"-->
-<!--                   [src]="selectedReport.photo3"-->
-<!--                   class="modal-img"-->
-<!--                   (click)="openImagePreview(selectedReport.photo3)">-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--        </div>-->
-
         <!-- RIGHT -->
         <div class="reporter-section">
           <label class="label-tiny">Reported By</label>
@@ -265,11 +210,21 @@
               <option value="rejected">Rejected</option>
               <option value="completed">Completed</option>
             </select>
+
+            <div *ngIf="selectedReport.status === 'rejected'" class="reject-reason-box">
+              <label class="label-tiny">Rejection Reason</label>
+
+              <select [(ngModel)]="selectedRejectionReason">
+                <option value="">Select reason</option>
+                <option *ngFor="let r of rejectionReasons" [value]="r">
+                  {{ r }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
 
       </div>
-      <!-- ✅ STATUS MOVED TO BOTTOM -->
       <div class="status-bottom">
         <div class="status-actions">
           <button class="btn-cancel" (click)="closeModal()">Cancel</button>

@@ -38,6 +38,8 @@ public class Report {
   private String status;
   private Long updatedBy;
 
+  private String rejectionReason;
+
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -79,6 +81,9 @@ public class Report {
 
   public Long getUpdatedBy() { return updatedBy; }
   public void setUpdatedBy(Long updatedBy) { this.updatedBy = updatedBy; }
+
+  public String getRejectionReason() { return rejectionReason; }
+  public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
 
   public LocalDateTime getCreatedAt() { return createdAt; }
   public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

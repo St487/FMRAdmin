@@ -26,6 +26,16 @@ selectedDate: string = '';
 
 uniqueTypes: string[] = [];
 
+rejectionReasons: string[] = [
+'Duplicate Report',
+'Invalid Information',
+'Spam Report',
+'Out of Scope',
+'Insufficient Evidence'
+];
+
+selectedRejectionReason: string = '';
+
 // NEW: image preview
 showImagePreview = false;
 previewImage: string | null = null;
@@ -73,12 +83,16 @@ constructor(
             : null,
           date: r.createdAt,
           status: r.status ? r.status.replace('_', ' ') : '',
+          rejectionReason: r.rejectionReason || '',
           reporter: {
             name: r.user?.name,
             email: r.user?.email,
             phone: r.user?.phone
           }
-        }));
+        }))
+          .sort((a, b) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+          );
 
         // ✅ EXTRACT UNIQUE TYPES
         this.uniqueTypes = [...new Set(this.reports.map(r => r.type))].filter(t => !!t);
@@ -144,6 +158,7 @@ constructor(
 
   openReport(report: any) {
     this.selectedReport = { ...report };
+    this.selectedRejectionReason = report.rejectionReason || '';
     this.showModal = true;
   }
 
@@ -153,9 +168,17 @@ constructor(
   }
 
   updateReport() {
+    if (this.selectedReport.status === 'rejected' && !this.selectedRejectionReason) {
+      alert('Please select a rejection reason');
+      return;
+    }
+
     const payload = {
       status: this.selectedReport.status.toLowerCase().replace(' ', '_'),
-      updatedBy: 1
+      updatedBy: 1,
+      rejectionReason: this.selectedReport.status === 'rejected'
+        ? this.selectedRejectionReason
+        : null
     };
 
     this.reportService.updateReport(this.selectedReport.id, payload)
@@ -165,12 +188,12 @@ constructor(
           this.showConfirmation = true;
           this.loadReports();
           setTimeout(() => this.showConfirmation = false, 3000);
+
         },
         error: (err) => console.error(err)
       });
   }
 
-  // ✅ NEW: Image Preview Functions
   openImagePreview(img: string) {
     this.previewImage = img;
     this.showImagePreview = true;

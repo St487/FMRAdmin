@@ -32,6 +32,11 @@ public class ReportService {
 
     report.setStatus(dto.getStatus());
     report.setUpdatedBy(dto.getUpdatedBy());
+    if ("rejected".equals(dto.getStatus())) {
+      report.setRejectionReason(dto.getRejectionReason());
+    } else {
+      report.setRejectionReason(null);
+    }
     report.setUpdatedAt(LocalDateTime.now());
 
     return reportRepository.save(report);
