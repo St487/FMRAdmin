@@ -68,7 +68,7 @@ constructor(
   }
 
   loadReports() {
-    const baseUrl = 'https://fmr-admin-backend.onrender.com/';
+    const baseUrl = 'https://fmr-admin-backend.onrender.com/api/reports';
 
     this.reportService.getAllReports().subscribe(data => {
       this.reports = data.map(r => ({
