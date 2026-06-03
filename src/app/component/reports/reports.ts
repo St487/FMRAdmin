@@ -64,6 +64,7 @@ constructor(
 
   loadReports() {
     const IMAGE_URL = 'https://fmr-backend-n0cs.onrender.com/';
+
     this.reportService.getAllReports().subscribe({
       next: (data) => {
         this.reports = data.map(r => ({
@@ -71,38 +72,54 @@ constructor(
           type: r.issueType,
           title: r.title,
           description: r.description,
-          photo: this.getFirstAvailablePhoto(r, IMAGE_URL),
-          photo1: r.photo1 ? IMAGE_URL + r.photo1 : null,
-          photo2: r.photo2 ? IMAGE_URL + r.photo2 : null,
-          photo3: r.photo3 ? IMAGE_URL + r.photo3 : null,
+
+          photo: this.getPhotoUrl(this.getFirstAvailablePhoto(r, IMAGE_URL), IMAGE_URL),
+
+          photo1: this.getPhotoUrl(r.photo1, IMAGE_URL),
+          photo2: this.getPhotoUrl(r.photo2, IMAGE_URL),
+          photo3: this.getPhotoUrl(r.photo3, IMAGE_URL),
+
           location: r.locationText,
           latitude: r.latitude,
           longitude: r.longitude,
+
           mapUrl: r.latitude && r.longitude
             ? `https://www.google.com/maps?q=${r.latitude},${r.longitude}&hl=es;z=14&output=embed`
             : null,
+
           date: r.createdAt,
           status: r.status ? r.status.replace('_', ' ') : '',
           rejectionReason: r.rejectionReason || '',
+
           reporter: {
             name: r.user?.name,
             email: r.user?.email,
             phone: r.user?.phone
           }
         }))
-          .sort((a, b) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-          );
+        .sort((a, b) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
 
-        // ✅ EXTRACT UNIQUE TYPES
         this.uniqueTypes = [...new Set(this.reports.map(r => r.type))].filter(t => !!t);
         console.log('Unique Types Found:', this.uniqueTypes);
 
         this.applyFilters();
-
       },
       error: (err) => console.error(err)
     });
+  }
+
+  getPhotoUrl(photo: string | null, baseUrl: string): string | null {
+    if (!photo) return null;
+
+    // already a full URL (Cloudinary, etc.)
+    if (photo.startsWith('http://') || photo.startsWith('https://')) {
+      return photo;
+    }
+
+    // local upload path
+    return baseUrl + photo;
   }
 
   applyFilters() {

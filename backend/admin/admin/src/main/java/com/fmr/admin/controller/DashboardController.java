@@ -7,7 +7,7 @@ import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://fmradmin.onrender.com")
 public class DashboardController {
 
   private final DashboardService service;

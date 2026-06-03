@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reports")
-@CrossOrigin(origins = "*") // keep simple for Angular dev
+@CrossOrigin(origins = "https://fmradmin.onrender.com") // keep simple for Angular dev
 public class ReportController {
 
   @Autowired
