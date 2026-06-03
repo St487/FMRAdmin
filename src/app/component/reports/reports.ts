@@ -73,7 +73,7 @@ constructor(
           title: r.title,
           description: r.description,
 
-          photo: this.getPhotoUrl(this.getFirstAvailablePhoto(r, IMAGE_URL), IMAGE_URL),
+          photo: this.getPhotoUrl(this.getFirstAvailablePhoto(r), IMAGE_URL),
 
           photo1: this.getPhotoUrl(r.photo1, IMAGE_URL),
           photo2: this.getPhotoUrl(r.photo2, IMAGE_URL),
@@ -156,10 +156,10 @@ constructor(
     return `${year}-${month}-${day}`; // matches input[type="date"]
   }
 
-  getFirstAvailablePhoto(r: any, baseUrl: string): string | null {
-    if (r.photo1) return baseUrl + r.photo1;
-    if (r.photo2) return baseUrl + r.photo2;
-    if (r.photo3) return baseUrl + r.photo3;
+  getFirstAvailablePhoto(r: any): string | null {
+    if (r.photo1) return r.photo1;
+    if (r.photo2) return r.photo2;
+    if (r.photo3) return r.photo3;
     return null;
   }
 
