@@ -39,7 +39,7 @@ selectedRange: string = '30';
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.http.get<any>('http://localhost:8080/api/dashboard')
+    this.http.get<any>('https://fmr-admin-backend.onrender.com/api/dashboard')
       .subscribe({
         next: (data) => {
           this.completedThisWeek = data.completed;
@@ -239,7 +239,7 @@ selectedRange: string = '30';
   reloadDashboard() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.http.get<any>(`http://localhost:8080/api/dashboard?range=${this.selectedRange}`)
+    this.http.get<any>(`https://fmr-admin-backend.onrender.com/api/dashboard?range=${this.selectedRange}`)
       .subscribe({
         next: (data) => {
           this.completedThisWeek = data.completed;
