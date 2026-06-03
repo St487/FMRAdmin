@@ -63,7 +63,6 @@ constructor(
   }
 
   loadReports() {
-    const API_URL = 'https://fmr-admin-backend.onrender.com/api/reports';
     const IMAGE_URL = 'https://fmr-backend-n0cs.onrender.com/';
     this.reportService.getAllReports().subscribe({
       next: (data) => {

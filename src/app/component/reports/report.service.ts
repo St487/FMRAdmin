@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class ReportService {
 
-private baseUrl = 'http://localhost:8080/api/reports';
+private baseUrl = 'https://fmr-admin-backend.onrender.com/api/reports';
 
 constructor(private http: HttpClient) {}
 
