@@ -1,6 +1,11 @@
 # FixMyRoad Admin
 This project is to help the admin to easily manage road and infrastructure issues reported by users (citizens). It provide a clear data and summary dashboard to show how many reports resolved or in progress. For mobile application can refer to [FMR](https://github.com/St487/FixMyRoad)
 
+## LINK
+[FMRAdmin](https://fmradmin.onrender.com)  
+Userid:```299430```  
+Password:```123456```
+
 ## Screenshots
 <img src="assets/login.png">
 <img src="assets/dashboard.png">
@@ -21,5 +26,3 @@ mvn spring-boot:run
 ```bash
 ng serve
 ```
-4. Userid:```299430```  
-Password:```123456```
