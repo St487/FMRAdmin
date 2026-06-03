@@ -13,6 +13,7 @@ templateUrl: './reports.html',
 styleUrl: './reports.css'
 })
 export class Reports implements OnInit {
+isLoading = false;
 
 showConfirmation = false;
 showModal = false;
@@ -63,6 +64,7 @@ constructor(
   }
 
   loadReports() {
+    this.isLoading = true;
     const IMAGE_URL = 'https://fmr-backend-n0cs.onrender.com/';
 
     this.reportService.getAllReports().subscribe({
@@ -105,8 +107,11 @@ constructor(
         console.log('Unique Types Found:', this.uniqueTypes);
 
         this.applyFilters();
+
+        this.isLoading = false;
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error(err);
+      this.isLoading = false;
     });
   }
 
