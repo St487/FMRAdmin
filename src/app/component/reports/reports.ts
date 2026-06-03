@@ -63,7 +63,8 @@ constructor(
   }
 
   loadReports() {
-    const baseUrl = 'https://fmr-backend-n0cs.onrender.com/';
+    const API_URL = 'https://fmr-admin-backend.onrender.com/api/reports';
+    const IMAGE_URL = 'https://fmr-backend-n0cs.onrender.com/';
     this.reportService.getAllReports().subscribe({
       next: (data) => {
         this.reports = data.map(r => ({
@@ -71,10 +72,10 @@ constructor(
           type: r.issueType,
           title: r.title,
           description: r.description,
-          photo: this.getFirstAvailablePhoto(r, baseUrl),
-          photo1: r.photo1 ? baseUrl + r.photo1 : null,
-          photo2: r.photo2 ? baseUrl + r.photo2 : null,
-          photo3: r.photo3 ? baseUrl + r.photo3 : null,
+          photo: this.getFirstAvailablePhoto(r, IMAGE_URL),
+          photo1: r.photo1 ? IMAGE_URL + r.photo1 : null,
+          photo2: r.photo2 ? IMAGE_URL + r.photo2 : null,
+          photo3: r.photo3 ? IMAGE_URL + r.photo3 : null,
           location: r.locationText,
           latitude: r.latitude,
           longitude: r.longitude,
